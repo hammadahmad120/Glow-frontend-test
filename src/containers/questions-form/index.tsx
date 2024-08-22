@@ -20,9 +20,10 @@ const QuestionsForm = () => {
   const [answersEnded, setAnswersEnded] = useState(false);
   const [answers, setAnswers] = useState<QuestionResponse[]>([]);
   const [stack, setStack] = useState<number[]>([]);
-  const currentQuestion = useMemo(()=> questionsData.find(
-    (ques) => ques.questionNumber === questionNumber
-  )!,[questionNumber]);
+  const currentQuestion = useMemo(
+    () => questionsData.find((ques) => ques.questionNumber === questionNumber)!,
+    [questionNumber]
+  );
   const currentAnswer = useMemo(
     () => answers.find((ques) => ques.questionNumber === questionNumber)!,
     [questionNumber, answers]
@@ -43,11 +44,11 @@ const QuestionsForm = () => {
       });
       setAnswers(updatedAnswers);
     },
-    [ answers, currentQuestion]
+    [answers, currentQuestion]
   );
 
   const onNextClick = useCallback(() => {
-    setStack( stack =>[...stack, questionNumber]);
+    setStack((stack) => [...stack, questionNumber]);
     if (!currentQuestion.nextStep) {
       setQuestionNumber((qn) => qn + 1);
       return;
@@ -69,40 +70,50 @@ const QuestionsForm = () => {
       nextStep = currentQuestion.nextStep[selectedAnswer.answer];
     }
     if (nextStep) {
-      if (nextStep === "END"){
-        // In case when you go back and select selection which now move to end then we need to remove all answers that are not valid anymore
-        setAnswers(answers => answers.filter(ans => ans.questionNumber <= currentQuestion.questionNumber))
-         setAnswersEnded(true);
-         return;
+      if (nextStep === "END") {
+        // In case when you go back and select selection which now move to end then we need to remove all answers greater then current step that are not valid anymore
+        setAnswers((answers) =>
+          answers.filter(
+            (ans) => ans.questionNumber <= currentQuestion.questionNumber
+          )
+        );
+        setAnswersEnded(true);
+        return;
       }
       // In case when you go back and select selection which now skips some steps then we need to remove those steps answers
-      setAnswers(answers => answers.filter(ans => ans.questionNumber <= currentQuestion.questionNumber || ans.questionNumber >= Number(nextStep) ))
+      setAnswers((answers) =>
+        answers.filter(
+          (ans) =>
+            ans.questionNumber <= currentQuestion.questionNumber ||
+            ans.questionNumber >= Number(nextStep)
+        )
+      );
       setQuestionNumber(nextStep as number);
     }
-  },[questionNumber, currentQuestion, answers]);
+  }, [questionNumber, currentQuestion, answers]);
 
-  const onBackClick = useCallback(()=>{
+  const onBackClick = useCallback(() => {
     const updatedStack = [...stack];
     setQuestionNumber(updatedStack.pop()!);
     setStack(updatedStack);
-  },[stack])
+  }, [stack]);
 
   return (
     <Box className={classes.container}>
       {answersEnded ? (
         <Typography component="h1" variant="h5">
-        Thank You !!!
-      </Typography>
+          Thank You !!!
+        </Typography>
       ) : (
         <>
-        <Question
-          currentQuestion={currentQuestion}
-          selectedAnswer={currentAnswer}
-          onBackClick={onBackClick}
-          onNextClick={onNextClick}
-          saveAnswer={saveAnswer}
-          showBack={currentQuestion.questionNumber !== 1}
-        />
+          <Question
+            currentQuestion={currentQuestion}
+            selectedAnswer={currentAnswer}
+            onBackClick={onBackClick}
+            onNextClick={onNextClick}
+            saveAnswer={saveAnswer}
+            showBack={currentQuestion.questionNumber !== 1}
+          />
         </>
       )}
       <DisplayAnswers answers={answers} answersCompleted={answersEnded} />
