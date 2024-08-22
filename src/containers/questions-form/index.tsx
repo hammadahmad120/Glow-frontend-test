@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useState } from "react";
 import { QuestionResponse } from "./types";
-import { Box, Divider, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import questionsData from "./QuestionData";
 import Question from "../../components/questions-form/question";
 import { makeStyles } from "@mui/styles";
@@ -43,7 +43,7 @@ const QuestionsForm = () => {
       });
       setAnswers(updatedAnswers);
     },
-    [questionNumber, answers]
+    [ answers, currentQuestion]
   );
 
   const onNextClick = useCallback(() => {
@@ -78,7 +78,7 @@ const QuestionsForm = () => {
       setAnswers(answers => answers.filter(ans => ans.questionNumber <= currentQuestion.questionNumber || ans.questionNumber >= Number(nextStep) ))
       setQuestionNumber(nextStep as number);
     }
-  },[currentQuestion, answers]);
+  },[questionNumber, currentQuestion, answers]);
 
   const onBackClick = useCallback(()=>{
     const updatedStack = [...stack];
