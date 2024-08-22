@@ -1,18 +1,23 @@
-import { Box, Button, Typography, ToggleButton, ToggleButtonGroup} from "@mui/material";
+import {
+  Box,
+  Button,
+  Typography,
+  ToggleButton,
+  ToggleButtonGroup,
+  TextField,
+} from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import {
   QuestionData,
   QuestionResponse,
 } from "../../containers/questions-form/types";
 
-
 interface QuestionProps {
   currentQuestion: QuestionData;
   selectedAnswer?: QuestionResponse;
   onNextClick: () => void;
   onBackClick: () => void;
-  saveAnswer: (value: boolean | number | string) => void;
-  showNext: boolean;
+  saveAnswer: (value: number | string) => void;
   showBack: boolean;
 }
 
@@ -40,7 +45,6 @@ const Question = ({
   onBackClick,
   saveAnswer,
   showBack,
-  showNext,
 }: QuestionProps) => {
   const classes = useStyles();
   return (
@@ -50,27 +54,43 @@ const Question = ({
       </Typography>
       <Box className={classes.answerSection}>
         <Typography component="h1" variant="h5">
-          {currentQuestion.type === "boolean" ? (
+          {currentQuestion.type === "Yes/No" && (
             <ToggleButtonGroup
               color="secondary"
-              value={true}
+              value={selectedAnswer?.answer || ""}
               exclusive
               onChange={(_, value) => saveAnswer(value)}
             >
-              <ToggleButton value={true}>Yes</ToggleButton>
-              <ToggleButton value={false}>No</ToggleButton>
+              <ToggleButton value={"Yes"}>Yes</ToggleButton>
+              <ToggleButton value={"No"}>No</ToggleButton>
             </ToggleButtonGroup>
-          ) : (
-            <input type="number" onBlur={(e) => saveAnswer(e.target.value)} />
+          )}
+
+          {currentQuestion.type === "number" && (
+            <TextField
+              id="outlined-number"
+              label="Number"
+              type="number"
+              onBlur={(e) => saveAnswer(e.target.value)}
+              InputLabelProps={{
+                shrink: true,
+              }}
+            />
           )}
         </Typography>
       </Box>
       <Box className={classes.buttonActions}>
-        <Button variant="contained" color="primary">
-          Back
-        </Button>
-
-        <Button variant="contained" color="primary" disabled={ selectedAnswer && selectedAnswer.response !== null ? false: true}>
+        {showBack && (
+          <Button variant="contained" color="primary">
+            Back
+          </Button>
+        )}
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={onNextClick}
+          disabled={selectedAnswer?.answer ? false : true}
+        >
           Next
         </Button>
       </Box>

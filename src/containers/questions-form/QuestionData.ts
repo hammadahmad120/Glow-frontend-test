@@ -4,10 +4,10 @@ const questionsData:QuestionData[] = [
     {
       questionNumber: 1,
       question: "Does your business operate in CA?",
-      type: "boolean",
+      type: "Yes/No",
       nextStep: {
-        true: 2,
-        false: "END",
+        "Yes": 2,
+        "No": "END",
       },
     },
     {
@@ -16,36 +16,36 @@ const questionsData:QuestionData[] = [
       type: "number",
       nextStep: {
       condition: "answer > 100",
-      true: "END",
-      false: 3,
+      Yes: "END",
+      No: 3,
       }
     },
     {
         questionNumber: 3,
       question: "Do you serve food?",
-      type: "boolean",
+      type: "Yes/No",
       nextStep: {
-        true: 4,
-        false: 6,
+        "Yes": 4,
+        "No": 6,
       },
     },
     {
         questionNumber: 4,
       question: "Do you serve hot food?",
-      type: "boolean",
+      type: "Yes/No",
     },
     {
         questionNumber: 5,
       question: "Are you open past midnight?",
-      type: "boolean",
+      type: "Yes/No",
     },
     {
         questionNumber: 6,
       question: "Do you host live music?",
-      type: "boolean",
+      type: "Yes/No",
       nextStep:{
-        true: "END",
-        false: "END"
+        "Yes": "END",
+        "No": "END"
       },
     },
   ];

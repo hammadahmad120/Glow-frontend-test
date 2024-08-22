@@ -1,7 +1,7 @@
 export interface QuestionResponse {
     questionNumber: number;
     question: string;
-    response: boolean | number | string;
+    answer: number | string;
 }
 
 export interface QuestionData {
