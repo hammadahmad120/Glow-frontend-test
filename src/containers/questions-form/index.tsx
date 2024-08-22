@@ -1,16 +1,18 @@
 import { useState } from "react";
 import { QuestionResponse } from "./types";
-import { Box, makeStyles } from "@material-ui/core";
+import { Box } from "@mui/material";
 import questionsData from "./QuestionData";
+import Question from "../../components/questions-form/question";
+import { makeStyles } from "@mui/styles";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles({
     container: {
       display: "flex",
       flexDirection: "column",
       alignItems: "center",
-      margin: theme.spacing(10)
+      margin: "80px"
     }
-  }));
+  });
 const QuestionsForm = () =>{
     const classes = useStyles();
     const [questionNumber, setQuestionNumber] = useState(1);
@@ -19,7 +21,7 @@ const QuestionsForm = () =>{
 
     return(
       <Box className={classes.container}>
-        Hello World
+        <Question currentQuestion = {currentQuestion} onBackClick={()=>{}} onNextClick={()=>{}} saveAnswer={(val) =>{}} showBack showNext />
         </Box>
     )
 }
