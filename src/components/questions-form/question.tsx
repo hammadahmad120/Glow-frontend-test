@@ -81,7 +81,7 @@ const Question = ({
       </Box>
       <Box className={classes.buttonActions}>
         {showBack && (
-          <Button variant="contained" color="primary">
+          <Button variant="contained" color="primary" onClick={onBackClick}>
             Back
           </Button>
         )}

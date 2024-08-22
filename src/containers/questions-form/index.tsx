@@ -1,9 +1,10 @@
 import { useCallback, useMemo, useState } from "react";
 import { QuestionResponse } from "./types";
-import { Box, Divider } from "@mui/material";
+import { Box, Divider, Typography } from "@mui/material";
 import questionsData from "./QuestionData";
 import Question from "../../components/questions-form/question";
 import { makeStyles } from "@mui/styles";
+import DisplayAnswers from "../../components/questions-form/DisplayAnswers";
 
 const useStyles = makeStyles({
   container: {
@@ -18,6 +19,7 @@ const QuestionsForm = () => {
   const [questionNumber, setQuestionNumber] = useState(1);
   const [answersEnded, setAnswersEnded] = useState(false);
   const [answers, setAnswers] = useState<QuestionResponse[]>([]);
+  const [stack, setStack] = useState<number[]>([]);
   const currentQuestion = questionsData.find(
     (ques) => ques.questionNumber === questionNumber
   )!;
@@ -45,6 +47,7 @@ const QuestionsForm = () => {
   );
 
   const onNextClick = () => {
+    setStack( stack =>[...stack, questionNumber]);
     if (!currentQuestion.nextStep) {
       setQuestionNumber((qn) => qn + 1);
       return;
@@ -52,7 +55,7 @@ const QuestionsForm = () => {
     const selectedAnswer = answers.find(
       (ans) => ans.questionNumber === currentQuestion.questionNumber
     )!;
-    let nextStep = null;
+    let nextStep: number | string;
     if (currentQuestion.nextStep?.condition) {
       const conditionFn = new Function(
         "answer",
@@ -67,24 +70,36 @@ const QuestionsForm = () => {
     }
     if (nextStep) {
       if (nextStep === "END") setAnswersEnded(true);
-      setQuestionNumber(+nextStep);
+      setQuestionNumber(nextStep as number);
     }
   };
+
+  const onBackClick = ()=>{
+    const updatedStack = [...stack];
+    setQuestionNumber(updatedStack.pop()!);
+    setStack(updatedStack);
+    console.log("Stack is: ", updatedStack);
+  }
 
   return (
     <Box className={classes.container}>
       {answersEnded ? (
-        <div> Thank You</div>
+        <Typography component="h1" variant="h5">
+        Thank You !!!
+      </Typography>
       ) : (
+        <>
         <Question
           currentQuestion={currentQuestion}
           selectedAnswer={currentAnswer}
-          onBackClick={() => {}}
+          onBackClick={onBackClick}
           onNextClick={onNextClick}
           saveAnswer={saveAnswer}
           showBack={currentQuestion.questionNumber !== 1}
         />
+        </>
       )}
+      <DisplayAnswers answers={answers} answersCompleted={answersEnded} />
     </Box>
   );
 };
