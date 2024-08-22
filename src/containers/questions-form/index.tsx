@@ -20,9 +20,9 @@ const QuestionsForm = () => {
   const [answersEnded, setAnswersEnded] = useState(false);
   const [answers, setAnswers] = useState<QuestionResponse[]>([]);
   const [stack, setStack] = useState<number[]>([]);
-  const currentQuestion = questionsData.find(
+  const currentQuestion = useMemo(()=> questionsData.find(
     (ques) => ques.questionNumber === questionNumber
-  )!;
+  )!,[questionNumber]);
   const currentAnswer = useMemo(
     () => answers.find((ques) => ques.questionNumber === questionNumber)!,
     [questionNumber, answers]
@@ -46,7 +46,7 @@ const QuestionsForm = () => {
     [questionNumber, answers]
   );
 
-  const onNextClick = () => {
+  const onNextClick = useCallback(() => {
     setStack( stack =>[...stack, questionNumber]);
     if (!currentQuestion.nextStep) {
       setQuestionNumber((qn) => qn + 1);
@@ -78,14 +78,13 @@ const QuestionsForm = () => {
       setAnswers(answers => answers.filter(ans => ans.questionNumber <= currentQuestion.questionNumber || ans.questionNumber >= Number(nextStep) ))
       setQuestionNumber(nextStep as number);
     }
-  };
+  },[currentQuestion, answers]);
 
-  const onBackClick = ()=>{
+  const onBackClick = useCallback(()=>{
     const updatedStack = [...stack];
     setQuestionNumber(updatedStack.pop()!);
     setStack(updatedStack);
-    console.log("Stack is: ", updatedStack);
-  }
+  },[stack])
 
   return (
     <Box className={classes.container}>
