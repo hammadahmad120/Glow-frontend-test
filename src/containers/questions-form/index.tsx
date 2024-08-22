@@ -73,6 +73,7 @@ const QuestionsForm = () => {
         // In case when you go back and select selection which now move to end then we need to remove all answers that are not valid anymore
         setAnswers(answers => answers.filter(ans => ans.questionNumber <= currentQuestion.questionNumber))
          setAnswersEnded(true);
+         return;
       }
       // In case when you go back and select selection which now skips some steps then we need to remove those steps answers
       setAnswers(answers => answers.filter(ans => ans.questionNumber <= currentQuestion.questionNumber || ans.questionNumber >= Number(nextStep) ))
