@@ -1,10 +1,9 @@
 import React from 'react';
+import QuestionsForm from './containers/questions-form';
 
 function App() {
   return (
-    <div >
-      Hello World
-    </div>
+   <QuestionsForm />
   );
 }
 
