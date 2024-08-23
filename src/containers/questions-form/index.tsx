@@ -4,7 +4,7 @@ import { Box, Typography } from "@mui/material";
 import questionsData from "./QuestionData";
 import Question from "../../components/questions-form/question";
 import { makeStyles } from "@mui/styles";
-import DisplayAnswers from "../../components/questions-form/DisplayAnswers";
+import AnswersListing from "../../components/questions-form/AnswersListing";
 
 const useStyles = makeStyles({
   container: {
@@ -116,7 +116,7 @@ const QuestionsForm = () => {
           />
         </>
       )}
-      <DisplayAnswers answers={answers} answersCompleted={answersEnded} />
+      <AnswersListing answers={answers} answersCompleted={answersEnded} />
     </Box>
   );
 };

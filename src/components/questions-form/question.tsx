@@ -11,6 +11,7 @@ import {
   QuestionData,
   QuestionResponse,
 } from "../../containers/questions-form/types";
+import { isAcceptedAnswer } from "../../utils";
 
 interface QuestionProps {
   currentQuestion: QuestionData;
@@ -71,7 +72,12 @@ const Question = ({
               id="outlined-number"
               label="Number"
               type="number"
-              onBlur={(e) => saveAnswer(e.target.value)}
+              value={selectedAnswer?.answer}
+              onChange={(e) =>{ 
+                if(Number(e.target.value) > 0){
+                  saveAnswer(e.target.value)
+                }else saveAnswer("");
+                }}
               InputLabelProps={{
                 shrink: true,
               }}
@@ -89,7 +95,7 @@ const Question = ({
           variant="contained"
           color="primary"
           onClick={onNextClick}
-          disabled={selectedAnswer?.answer ? false : true}
+          disabled={!isAcceptedAnswer(selectedAnswer?.answer)}
         >
           Next
         </Button>
